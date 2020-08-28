@@ -10,6 +10,7 @@ float plot(vec2 st){
     return smoothstep(.02,0.,abs(st.y-st.x));
 }
 
+//
 void main(){
     vec2 st=gl_FragCoord.xy/u_resolution;
     float y=st.x;
