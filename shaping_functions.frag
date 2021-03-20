@@ -24,19 +24,19 @@ float blinnWyvillCosineApproximation(float x){
     float y = fa * x6 - fb*x4 + fc * x2;
 
     return y;
-    
+
 }
 
 void main(){
     vec2 st=gl_FragCoord.xy/u_resolution;
-    
+
     float y=blinnWyvillCosineApproximation(st.x);
-    
+
     vec3 color=vec3(y);
-    
+
     // Ploat a line
     float pct=plot(st,y);
     color=(1.-pct)*color+pct*vec3(0.,1.,0.);
-    
+
     gl_FragColor=vec4(color,1.);
 }
