@@ -13,32 +13,29 @@ float plot(vec2 st, float pct){
   return smoothstep(pct - 0.02, pct, st.y) - smoothstep(pct, pct + 0.02, st.y);
 }
 
-
-float doubleCubicSeat(float value, vec2 coord){
+float doubleOddPolynomialSeat(float value, vec2 coord, int flatness){
   float min_param_x = 0.0 + EPSILON;
   float max_param_x = 1.0 - EPSILON;
   float min_param_y = 0.0;
   float max_param_y = 1.0;
 
   coord.x = min(max_param_x, max(min_param_x, coord.x));
-  coord.y = min(max_param_y, max(min_param_y, coord.y));
+  coord.y = min(max_param_y, max(min_param_y, coord.x));
 
+  float p = float(2 * flatness + 1);
   float y = 0.0;
 
   if(value <= coord.x){
-    y = coord.y - coord.y * pow(1. - value / coord.x, 3.0);
-  } else {
-    y = coord.y + (1. - coord.y)* pow((value - coord.x)/(1. - coord.x), 3.0);
+    return coord.y - coord.y * pow(1.0 - value / coord.x, p);
   }
 
-  return y;
+  return coord.y + (1. - coord.y) * pow((value - coord.x)/(1. - coord.x), p);
 }
 
 void main (){
   vec2 st = gl_FragCoord.xy/u_resolution;
 
-  float y = doubleCubicSeat(st.x, vec2(0.407, 0.720));
-  // float y = doubleCubicSeat(st.x, vec2(0.6, 0.2));
+  float y = doubleOddPolynomialSeat(st.x, vec2(0.5, 0.6), 10);
 
   float pct = plot(st, y);
 
